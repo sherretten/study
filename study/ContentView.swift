@@ -9,53 +9,42 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @Environment(\.modelContext) var modelContext
+    @Query var courses: [Course]
+    @State private var path = [Course]()
+    
     var body: some View {
-        NavigationSplitView {
+        NavigationStack(path: $path) {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                ForEach(courses) { course in
+                    NavigationLink(value: course) {
+                        HStack {
+                            Text(course.name).font(.headline)
+                        }
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete(perform: deleteCourses)
             }
+            .navigationTitle("Courses")
+            .navigationDestination(for: Course.self, destination: EditCourseView.init)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+                Button("Add Course", systemImage: "plus", action: addCourse)
             }
         }
     }
-}
+    
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+    
+    func addCourse() {
+        let course = Course(name: "")
+        modelContext.insert(course)
+        path = [course]
+    }
+    
+    func deleteCourses(_ indexSet: IndexSet) {
+        for index in indexSet {
+            let course = courses[index]
+            modelContext.delete(course)
+        }
+    }
 }
