@@ -17,7 +17,13 @@ struct EditCourseView: View {
             TextField("Name", text: $course.name)
             Section("Sets") {
                 ForEach(course.sets) { set in
-                    Text(set.name)
+                    NavigationLink(value: set) {
+                        HStack{
+                            Text(set.name)
+                        }
+                    }
+                    .navigationTitle("Sets")
+                    .navigationDestination(for: Set.self, destination: EditSetView.init)
                 }
                 HStack {
                     TextField("Add a new set in \(course.name)", text: $newSetName)
