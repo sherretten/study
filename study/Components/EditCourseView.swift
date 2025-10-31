@@ -10,28 +10,26 @@ import SwiftData
 
 struct EditCourseView: View {
     @Bindable var course: Course
+    @Binding var navigationPath: NavigationPath
     @State private var newSetName = ""
     
     var body: some View {
         Form {
             TextField("Name", text: $course.name)
             Section("Sets") {
-                ForEach(course.sets) { set in
-                    NavigationLink(value: set) {
-                        HStack{
-                            Text(set.name)
-                        }
+                List(course.sets) { set in
+                    NavigationLink(value: Destination.setItem(set)) {
+                        Text(set.name)
                     }
-                    .navigationTitle("Sets")
-                    .navigationDestination(for: Set.self, destination: EditSetView.init)
                 }
+                
                 HStack {
                     TextField("Add a new set in \(course.name)", text: $newSetName)
                     Button("Add", action: addSet)
                 }
             }
         }
-        .navigationTitle("Edit Course")
+        .navigationTitle(course.name)
         .navigationBarTitleDisplayMode(.inline)
     }
     
@@ -46,14 +44,15 @@ struct EditCourseView: View {
     }
 }
 
-#Preview {
-    do {
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Course.self, configurations: configuration)
-        let example = Course(name: "Testing course 1")
-        return EditCourseView(course: example)
-            .modelContainer(container)
-    } catch {
-        fatalError("Failed to create model container")
-    }
-}
+//#Preview {
+//    do {
+//        let navigationPath = NavigationPath()
+//        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+//        let container = try ModelContainer(for: Course.self, configurations: configuration)
+//        let example = Course(name: "Testing course 1")
+//        return EditCourseView(course: example, navigationPath: navigationPath)
+//            .modelContainer(container)
+//    } catch {
+//        fatalError("Failed to create model container")
+//    }
+//}

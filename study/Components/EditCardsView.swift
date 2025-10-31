@@ -11,6 +11,7 @@ import SwiftUI
 struct EditCardsView: View {
     @Environment(\.modelContext) var modelContext
     @Bindable var set: Set
+    @Binding var navigationPath: NavigationPath
 
     var body: some View {
         List {
@@ -23,6 +24,10 @@ struct EditCardsView: View {
                     addNewCard()
                 }
             }
+        }
+        .navigationTitle("Edit cards for \(set.name)")
+        .toolbar {
+            Button("Add Course", systemImage: "plus", action: addNewCard)
         }
     }
     

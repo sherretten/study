@@ -12,14 +12,14 @@ struct FlashCardRow: View {
     @Bindable var card: Card
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             VStack {
                 Text("Term")
                 TextField("Term", text: $card.term)
             }
             VStack {
                 Text("Definition")
-                TextField("Definition", text: $card.definition)
+                TextEditor(text: $card.definition)
             }
         }
         
