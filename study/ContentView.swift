@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  study
-//
-//  Created by Nordic on 10/25/25.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -49,8 +42,6 @@ struct ContentView: View {
             }
         }
     }
-    
-
     
     func addCourse() {
         let course = Course(name: "")

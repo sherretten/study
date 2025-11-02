@@ -13,39 +13,66 @@ struct TestView: View {
     @Bindable var set: Set
     @State private var answers: [CardAnswer] = []
     @Binding var navigationPath: NavigationPath
+    @State var showUnknown: Bool = false
     
     init(set: Set, navigationPath: Binding<NavigationPath>) {
         self.set = set
         _answers  = State(initialValue: set.cards.map { _ in CardAnswer() })
         _navigationPath = navigationPath
     }
-
     
+    private var filteredCards: [(offset: Int, element: Card)] {
+        let enumerated = Array(set.cards.enumerated())
+        if showUnknown {
+            return enumerated.filter { set.cards[$0.offset].unknown }
+        }
+        return enumerated
+    }
+
     var body: some View {
-        Text("Hello test view").navigationTitle("Testing \(set.name)")
-//        ScrollView {
-//            ForEach(Array(set.cards.enumerated()), id: \.element.id) { index, card in
-//                VStack {
-//                    HStack {
-//                        Text("\(index + 1) :")
-//                        Text(card.term)
-//                    }
-//                    TextField("Enter definition", text: $answers[index].userAnswer)
-//                    
-//                    if answers[index].showAnswer {
-//                        Text(card.definition).font(.subheadline).padding(8)
-//                    }
-//                    Button(action: {
-//                        answers[index].showAnswer.toggle()
-//                    }) {
-//                        Text(answers[index].showAnswer ? "Hide Answer" : "Show answer")
-//                    }.foregroundColor(.blue)
-//                }
-//                .padding()
-//                .background(Color(.systemBackground))
-//                .cornerRadius(12)
-//                .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
-//            }
-//        }
+        ScrollView {
+            ForEach(filteredCards, id: \.element.id) { offset, card in
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack {
+                        Text("\(offset + 1) :")
+                        Text(card.term)
+                    }
+                    TextEditor(text: $answers[offset].userAnswer)
+                        .frame(minHeight: 100)
+                        .padding(8)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(.systemGray4), lineWidth: 1)
+                        )
+                    
+                    if answers[offset].showAnswer {
+                        Text(card.definition).padding(8).foregroundStyle(Color.green).font(.title2)
+                    }
+                    Button(action: {
+                        answers[offset].showAnswer.toggle()
+                    }) {
+                        Text(answers[offset].showAnswer ? "Hide Answer" : "Show answer")
+                    }.foregroundColor(.blue)
+                }
+                .padding()
+                .background(Color(.white))
+                .cornerRadius(12)
+                .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+            }
+        }
+        .padding()
+        .navigationTitle("Testing \(set.name)")
+        .background(Color(.systemGray6).ignoresSafeArea())
+        .toolbar {
+            Toggle(isOn: $showUnknown) {
+                HStack {
+                    Image(systemName: showUnknown ? "flag" : "flag.fill")
+                    Text(showUnknown ? "All" : "Flagged only")
+                    Spacer()
+                }
+            }.toggleStyle(.button)
+        }
     }
 }

@@ -8,8 +8,7 @@
 import Foundation
 import SwiftData
 
-@Model
-class Set {
+@Model class Set {
     var id: UUID
     var name: String
     var createdAt: Date

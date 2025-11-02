@@ -1,10 +1,3 @@
-//
-//  EditCourseView.swift
-//  study
-//
-//  Created by Nordic on 10/27/25.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -15,7 +8,9 @@ struct EditCourseView: View {
     
     var body: some View {
         Form {
-            TextField("Name", text: $course.name)
+            Section("Course Name") {
+                TextField("Name", text: $course.name).textFieldStyle(RoundedBorderTextFieldStyle())
+            }
             Section("Sets") {
                 List(course.sets) { set in
                     NavigationLink(value: Destination.setItem(set)) {
@@ -24,8 +19,8 @@ struct EditCourseView: View {
                 }
                 
                 HStack {
-                    TextField("Add a new set in \(course.name)", text: $newSetName)
-                    Button("Add", action: addSet)
+                    TextField("Add a new set in \(course.name)", text: $newSetName).textFieldStyle(RoundedBorderTextFieldStyle())
+                    Button("Add", action: addSet).disabled(newSetName.isEmpty)
                 }
             }
         }
@@ -43,16 +38,3 @@ struct EditCourseView: View {
         }
     }
 }
-
-//#Preview {
-//    do {
-//        let navigationPath = NavigationPath()
-//        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-//        let container = try ModelContainer(for: Course.self, configurations: configuration)
-//        let example = Course(name: "Testing course 1")
-//        return EditCourseView(course: example, navigationPath: navigationPath)
-//            .modelContainer(container)
-//    } catch {
-//        fatalError("Failed to create model container")
-//    }
-//}

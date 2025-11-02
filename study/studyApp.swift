@@ -1,10 +1,3 @@
-//
-//  studyApp.swift
-//  study
-//
-//  Created by Nordic on 10/25/25.
-//
-
 import SwiftUI
 import SwiftData
 
