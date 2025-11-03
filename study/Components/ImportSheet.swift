@@ -37,24 +37,32 @@ struct ImportSheet: View {
     }
     func parseCards() -> [Card] {
         let cardStrings = ImportString.components(separatedBy: ";")
+        print(cardStrings)
         var newCards: [Card] = []
-           
-           for cardString in cardStrings {
-               let trimmed = cardString.trimmingCharacters(in: .whitespacesAndNewlines)
-               print(trimmed)
-               guard !trimmed.isEmpty else { continue }
-               
-               let components = trimmed.components(separatedBy: "\t")
-               if components.count >= 2 {
-                   let term = components[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                   let definition = components[1].trimmingCharacters(in: .whitespacesAndNewlines)
-                   
-                   if !term.isEmpty && !definition.isEmpty {
-                       newCards.append(Card(term: term, definition: definition))
-                   }
-               }
-           }
+        
+        for cardString in cardStrings {
+            // Skip empty cards
+            let trimmedCard = cardString.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmedCard.isEmpty {
+                continue
+            }
+            
+            // Find the first tab character to split term and definition
+            if let tabRange = cardString.range(of: "\t") {
+                let term = String(cardString[..<tabRange.lowerBound])
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                let definition = String(cardString[tabRange.upperBound...])
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    .replacingOccurrences(of: "^\t+", with: "", options: .regularExpression)
+                
+                if !term.isEmpty && !definition.isEmpty {
+                    newCards.append(Card(term: term, definition: definition))
+                }
+            }
+        }
            return newCards
+        
     }
     
     func saveCards() {
