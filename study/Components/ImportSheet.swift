@@ -4,7 +4,7 @@ struct ImportSheet: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
     @Bindable var set: Set
-    @State var ImportString = ""
+    @State var ImportString: String = ""
     @FocusState var focusedInput
     
     var body: some View {
@@ -41,6 +41,7 @@ struct ImportSheet: View {
            
            for cardString in cardStrings {
                let trimmed = cardString.trimmingCharacters(in: .whitespacesAndNewlines)
+               print(trimmed)
                guard !trimmed.isEmpty else { continue }
                
                let components = trimmed.components(separatedBy: "\t")

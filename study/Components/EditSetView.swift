@@ -61,7 +61,7 @@ struct EditSetView: View {
                                 }
                             )
                             .opacity(isFlipped ? 1 : 0)
-                            .rotation3DEffect(.degrees(isFlipped ? 0:  -180), axis: (x: -1, y: 1, z: 0))
+                            .rotation3DEffect(.degrees(isFlipped ? 0:  -180), axis: (x: 0, y: 1, z: 0))
                             .scaledToFit()
                     }
                     .onTapGesture {

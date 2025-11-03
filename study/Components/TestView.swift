@@ -31,11 +31,17 @@ struct TestView: View {
 
     var body: some View {
         ScrollView {
+            Button("Shuffle", systemImage: "shuffle") { set.cards.shuffle() }
             ForEach(filteredCards, id: \.element.id) { offset, card in
                 VStack(alignment: .leading, spacing: 20) {
                     HStack {
                         Text("\(offset + 1) :")
                         Text(card.term)
+                        Spacer()
+                        Toggle(isOn: $set.cards[offset].unknown) {
+                            Image(systemName: set.cards[offset].unknown ? "flag.fill" : "flag")
+                        }
+                        .toggleStyle(.button).padding()
                     }
                     TextEditor(text: $answers[offset].userAnswer)
                         .frame(minHeight: 100)

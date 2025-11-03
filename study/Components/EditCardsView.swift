@@ -11,7 +11,7 @@ struct EditCardsView: View {
         ScrollViewReader { proxy in
             ScrollView() {
                 VStack(spacing: 20) {
-                    ForEach(set.cards) { card in
+                    ForEach(set.cards, id: \.id) { card in
                         FlashCardRow(card: card, focusedCardID: _focusedCardId, onDelete: {
                             deleteCard(card)
                         })
@@ -21,6 +21,11 @@ struct EditCardsView: View {
                     .cornerRadius(10)
                     .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
                     
+                    HStack {
+                        Spacer()
+                        Button("Add Card", action: addNewCard)
+                        Spacer()
+                    }
                     Color.clear.frame(height: 1).id("bottom")
                 }
             }
@@ -32,7 +37,7 @@ struct EditCardsView: View {
             .padding()
             .navigationTitle("Edit cards for \(set.name)")
             .toolbar {
-                Button("Add Course", systemImage: "plus") {
+                Button("Add Card", systemImage: "plus") {
                     addNewCard()
                 }
             }
