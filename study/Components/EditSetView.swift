@@ -9,6 +9,8 @@ struct EditSetView: View {
     @State private var isFlipped = false
     @Binding var navigationPath: NavigationPath
     @State var showingImport = false
+    @State var showingExport = false
+    @State var exportedText = ""
 
     @State private var rotation: Double = 0;
     
@@ -18,7 +20,12 @@ struct EditSetView: View {
             
             HStack(spacing: 12) {
                 Button("Shuffle", systemImage: "shuffle") { set.cards.shuffle() }
-                Button("Export", systemImage: "square.and.arrow.up") {}
+                Button("Export", systemImage: "square.and.arrow.up") {
+                    exportCards()
+                }
+                .sheet(isPresented: $showingExport) {
+                    ExportSheet(exportedText: $exportedText)
+                }
                 Button(action: {navigationPath.append(Destination.editCards(set))}) {
                     HStack {
                         Image(systemName: "pencil")
@@ -104,4 +111,13 @@ struct EditSetView: View {
             }
         }
     }
+    func exportCards() {
+        exportedText = set.cards.map { card in
+            "\(card.term)\t\(card.definition)"
+        }.joined(separator: ";")
+        
+        showingExport = true
+    }
 }
+
+
