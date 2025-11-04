@@ -12,16 +12,15 @@ struct FlashCardRow: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text("Term")
-                        .focused($focusedCardID, equals: card.id)
                         .bold()
                     Spacer()
                     Button("Delete", systemImage: "trash") {
                         onDelete()
                     }
                 }
-                TextField("Term", text: $card.term)
+                TextField("Term", text: $card.term, axis: .vertical)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-
+                    .focused($focusedCardID, equals: card.id)
             }
             VStack(alignment: .leading) {
                 Text("Definition").bold()
