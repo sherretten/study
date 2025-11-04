@@ -1,10 +1,3 @@
-//
-//  Class.swift
-//  study
-//
-//  Created by Nordic on 10/27/25.
-//
-
 import SwiftData
 import Foundation
 

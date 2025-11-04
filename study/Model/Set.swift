@@ -1,10 +1,3 @@
-//
-//  Set.swift
-//  study
-//
-//  Created by Nordic on 10/27/25.
-//
-
 import Foundation
 import SwiftData
 
@@ -14,6 +7,10 @@ import SwiftData
     var createdAt: Date
     var updatedAt: Date
     @Relationship(deleteRule: .cascade) var cards = [Card]()
+    
+    var sortedCards: [Card] {
+        cards.sorted { $0.createdAt < $1.createdAt }
+    }
     
     init(name: String, createdAt: Date = .now, updatedAt: Date = .now) {
         self.id = UUID()

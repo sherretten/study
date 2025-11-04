@@ -12,7 +12,7 @@ struct EditCardsView: View {
         ScrollViewReader { proxy in
             ScrollView() {
                 VStack(spacing: 20) {
-                    ForEach(sortedCards()) { card in
+                    ForEach(set.sortedCards) { card in
                         FlashCardRow(card: card, focusedCardID: _focusedCardId, onDelete: {
                             deleteCard(card)
                         })
@@ -51,16 +51,6 @@ struct EditCardsView: View {
                 }
             }
         }.background(Color(.systemGray6))
-    }
-    
-    func sortedCards() -> [Card] {
-        set.cards.sorted { card1, card2 in
-            guard let index1 = cardInsertedOrder.firstIndex(of: card1.id),
-                  let index2 = cardInsertedOrder.firstIndex(of: card2.id) else {
-                return false
-            }
-            return index1 < index2
-        }
     }
     
     func addNewCard() {

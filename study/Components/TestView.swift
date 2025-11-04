@@ -22,16 +22,16 @@ struct TestView: View {
     }
     
     private var filteredCards: [(offset: Int, element: Card)] {
-        let enumerated = Array(set.cards.enumerated())
+        let enumerated = Array(set.sortedCards.enumerated())
         if showUnknown {
-            return enumerated.filter { set.cards[$0.offset].unknown }
+            return enumerated.filter { set.sortedCards[$0.offset].unknown }
         }
         return enumerated
     }
 
     var body: some View {
         ScrollView {
-            Button("Shuffle", systemImage: "shuffle") { set.cards.shuffle() }
+//            Button("Shuffle", systemImage: "shuffle") { }
             ForEach(filteredCards, id: \.element.id) { offset, card in
                 VStack(alignment: .leading, spacing: 20) {
                     HStack {
