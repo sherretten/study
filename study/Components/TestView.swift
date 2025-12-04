@@ -14,6 +14,7 @@ struct TestView: View {
     @State private var answers: [CardAnswer] = []
     @Binding var navigationPath: NavigationPath
     @State var showUnknown: Bool = false
+    @State var showAllAnswers: Bool = false
     
     init(set: Set, navigationPath: Binding<NavigationPath>) {
         self.set = set
@@ -31,7 +32,6 @@ struct TestView: View {
 
     var body: some View {
         ScrollView {
-//            Button("Shuffle", systemImage: "shuffle") { }
             ForEach(filteredCards, id: \.element.id) { offset, card in
                 VStack(alignment: .leading, spacing: 20) {
                     HStack {
@@ -53,7 +53,7 @@ struct TestView: View {
                                 .stroke(Color(.systemGray4), lineWidth: 1)
                         )
                     
-                    if answers[offset].showAnswer {
+                    if answers[offset].showAnswer || showAllAnswers {
                         Text(card.definition).padding(8).foregroundStyle(Color.green).font(.title2)
                     }
                     Button(action: {
@@ -77,6 +77,12 @@ struct TestView: View {
                 HStack {
                     Image(systemName: showUnknown ? "flag" : "flag.fill")
                     Text(showUnknown ? "All" : "Flagged only")
+                    Spacer()
+                }
+            }.toggleStyle(.button)
+            Toggle(isOn: $showAllAnswers) {
+                HStack {
+                    Text(showUnknown ? "Hide Answers" : "Show answers")
                     Spacer()
                 }
             }.toggleStyle(.button)
