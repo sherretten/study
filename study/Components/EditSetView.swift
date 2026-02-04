@@ -125,5 +125,3 @@ struct EditSetView: View {
         showingExport = true
     }
 }
-
-

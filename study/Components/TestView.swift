@@ -31,7 +31,7 @@ struct TestView: View {
     }
 
     var body: some View {
-        ScrollView {
+        List {
             ForEach(filteredCards, id: \.element.id) { offset, card in
                 VStack(alignment: .leading, spacing: 20) {
                     HStack {
